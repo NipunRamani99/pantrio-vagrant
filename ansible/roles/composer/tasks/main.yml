@@ -15,7 +15,6 @@
   shell: php composer-installer.php
   args:
     chdir: /usr/src/
-    warn: false
   become: yes
   when: composer_bin.stat.exists == False
 

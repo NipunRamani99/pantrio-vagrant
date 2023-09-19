@@ -1,6 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-
+require 'yaml'
 Vagrant.configure("2") do |config|
 
   # this should be modified for each project before spin-up
@@ -97,14 +97,14 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   #
   config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.synced_folder "shared", "/var/www/html", create: true, type: "nfs",
-    mount_options: %w{rw,async,fsc,nolock,vers=3,udp,rsize=32768,wsize=32768,hard,noatime,actimeo=2}
+  config.vm.synced_folder "shared", "/var/www/html", create: true
   config.vm.synced_folder "ansible", "/ansible"
 
 
   # Provider-specific configuration
   #
   config.vm.provider 'virtualbox' do |vb|
+    vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
     vb.memory = lcfg['vbox']['memory']
     vb.gui = lcfg['vbox']['use_gui']
   end
@@ -126,5 +126,4 @@ Vagrant.configure("2") do |config|
     ansible.inventory_path = 'inventory'
     ansible.limit = 'all'
   end
-
 end

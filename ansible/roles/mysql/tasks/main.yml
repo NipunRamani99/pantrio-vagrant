@@ -6,7 +6,7 @@
 
 - name: Make sure pymysql is installed
   apt:
-    name: python-pymysql
+    name: python3-pymysql
     state: present
 
 - name: Create a new database with name {app_name}
