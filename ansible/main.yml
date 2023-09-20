@@ -34,7 +34,7 @@
   - name: Configure PHP (FPM)
     copy:
       src: /ansible/assets/php-fpm.ini
-      dest: /etc/php/8.0/fpm/php.ini
+      dest: /etc/php/8.2/fpm/php.ini
 
   - name: Install composer
     include_role:
@@ -71,13 +71,9 @@
 
   - name: Clone the code repository to the docroot.
     git:
-      repo: 'https://github.com/planetchili/pantrio.git'
+      repo: 'https://github.com/NipunRamani99/planetchili-pantrio.git'
       dest: /var/www/html/pantrio
       update: no
-    become: true
-
-  - name: Add php curl
-    shell: apt-get install php8.0-curl
     become: true
 
   - name: Install composer packages
@@ -100,20 +96,27 @@
       chdir: /var/www/html/pantrio
     become: true
 
+  - name: cache configuration
+    shell: php artisan config:cache
+    args:
+      chdir: /var/www/html/pantrio
+    become: true
+
 #  - name: link laravel storage
 #    shell: php artisan storage:link
 #    args:
 #      chdir: /var/www/html/pantrio
 
-  - name: Laravel migrate
-    shell: php artisan migrate:fresh --seed
-    args:
-      chdir: /var/www/html/pantrio
-    become: true
+#  - name: Laravel migrate
+#    shell: php artisan migrate:fresh --seed
+#    args:
+#      chdir: /var/www/html/pantrio
+#    become: true
 
   - name: Install npm packages
     community.general.npm:
       path: /var/www/html/pantrio
+      no_bin_links: true
     become: true
 
 ###  - name: run webpack
